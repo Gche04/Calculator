@@ -11,48 +11,33 @@ let toCalculate = '0';
 let holdResult = '';
 let heldContent = '';
 
+window.addEventListener('keydown' , e => {
+    keyBoardSupport(e);
+});
+
 buttons.forEach(element => element.addEventListener('click', addNumToDisplay));
 operators.forEach(element => element.addEventListener('click', addOperatorToDisplay));
 equals.addEventListener('click', giveResult);
 clear.addEventListener('click', clearAll);
-erase.addEventListener('click', e => {
-    //console.log('calc b4 erase-- ' + toCalculate);
-    if(!heldContent){
-        return;
-    }
-    let newHeld = heldContent.split('').filter(element => {return !(element == '')});
-    let newCalc = '';
-    newHeld.pop();
-    //console.log('held array--- ' + newHeld)
-    if(newHeld.length == 0){
-        heldContent = '';
-        displayResult.textContent = '0';
-        newCalc = toCalculate.split('')/*.filter(element => {return !(element == '')})*/;
-        //console.log('new Calc array--- ' + newCalc)
-        newCalc.pop();
-        newCalc.push('0');
-        //toCalculate = newCalc.join('');
-    }else{
-        heldContent = newHeld.join('')
-        newCalc = toCalculate.split('')/*.filter(element => {return !(element == '')})*/;
-        //console.log('new Calc array--- ' + newCalc)
-        newCalc.pop();
-        //toCalculate = newCalc.join('');
-        displayResult.textContent = heldContent;
-    }
+erase.addEventListener('click', eraser);
 
-    toCalculate = newCalc.join('');
-    //console.log('calc on erase-- ' + toCalculate);
-    //console.log('held cont after eras---- ' + heldContent)
-})
 
+//---
 
 function addNumToDisplay(){
+
+    if(displayResult.textContent == 'check input!'){
+        return;
+    }
 
     if(!(!holdResult)){
         clearAll();
     }
     
+    if(heldContent.includes('.') && this.textContent == '.'){
+        return;
+    }
+
     heldContent += this.textContent;
 
     if(displayResult.textContent == '0' || lastIsOperator(toCalculate)){
@@ -64,11 +49,13 @@ function addNumToDisplay(){
         toCalculate = this.textContent;
     
     }else{toCalculate += this.textContent;}
-    //console.log('held cont---- ' + heldContent)
-    //console.log('add num funt-- ' + toCalculate);
 }
 
 function addOperatorToDisplay(){
+
+    if(displayResult.textContent == 'check input!'){
+        return;
+    }
 
     heldContent = '';
     if(toGiveResult(toCalculate)){
@@ -92,10 +79,7 @@ function addOperatorToDisplay(){
         
         displayWork.textContent += this.textContent;
         toCalculate += this.textContent;
-        //console.log(toCalculate);
     }
-    
-    //console.log(toCalculate);
 }
 
 function giveResult(){
@@ -116,7 +100,12 @@ function giveResult(){
     }else{
 
         result = Number(operator(Number(value[0]), value[1], Number(value[2])));
-        if(!Number.isInteger(result)){
+        if (result == Infinity){
+            result = '';
+            displayResult.textContent = 'check input!';
+            holdResult = '';
+        }
+        else if(!Number.isInteger(result)){  
             displayResult.textContent = result.toFixed(5).toString();
             holdResult = result.toFixed(5).toString();
         }else{
@@ -130,12 +119,120 @@ function giveResult(){
     heldContent = '';
 }
 
+function eraser(){
+
+    if(!heldContent){
+        return;
+    }
+    let newHeld = heldContent.split('').filter(element => {return !(element == '')});
+    let newCalc = '';
+    newHeld.pop();
+
+    if(newHeld.length == 0){
+        heldContent = '';
+        displayResult.textContent = '0';
+        newCalc = toCalculate.split('');
+        newCalc.pop();
+        newCalc.push('0');
+    }else{
+        heldContent = newHeld.join('')
+        newCalc = toCalculate.split('');
+        newCalc.pop();
+        displayResult.textContent = heldContent;
+    }
+
+    toCalculate = newCalc.join('');
+}
+
 function clearAll(){
     toCalculate = '0';
     holdResult = '';
     heldContent = '';
     displayResult.textContent = '0';
     displayWork.textContent = '';
+}
+
+function keyBoardSupport(e){
+    
+    const forButtons = document.querySelector(`[data-button="${e.key}"]`);
+    const forOperators = document.querySelector(`[data-operator="${e.key}"]`);
+        
+    if(!(!forButtons)){
+        addNumKeyboardSupport(e);
+    }
+    else if(!(!forOperators)){
+        let opt = ' ' + e.key + ' ';
+        addOperatorKeyboardSupport(opt);
+    }
+    else if(e.key == '='){
+        giveResult();
+    }
+    else if(e.key == "Backspace"){
+        eraser();
+    }
+    else if(e.key == "Escape"){
+        clearAll();
+    }
+    else{return;}
+    
+}
+
+function addNumKeyboardSupport(e){
+
+    if(displayResult.textContent == 'check input!'){
+        return;
+    }
+
+    if(!(!holdResult)){
+        clearAll();
+    }
+    
+    if(heldContent.includes('.') && e.key == '.'){
+        return;
+    }
+
+    heldContent += e.key;
+
+    if(displayResult.textContent == '0' || lastIsOperator(toCalculate)){
+        displayResult.textContent = e.key;
+    }else{
+        displayResult.textContent += e.key;
+    }
+    if(toCalculate == '0'){
+        toCalculate = e.key;
+    
+    }else{toCalculate += e.key;}
+}
+
+function addOperatorKeyboardSupport(optSel){
+
+    if(displayResult.textContent == 'check input!'){
+        return;
+    }
+
+    heldContent = '';
+    if(toGiveResult(toCalculate)){
+        giveResult();
+    }
+
+    if(lastIsOperator(toCalculate)){
+        dontAddOperator(optSel);
+
+    }else{
+        
+        ifNegativeValue();
+        
+        if(!holdResult){
+            displayWork.textContent += toCalculate;
+        }else{
+            displayWork.textContent += holdResult;
+            toCalculate = holdResult;
+            holdResult = '';
+        }
+        
+        displayWork.textContent += optSel;
+        toCalculate += optSel;
+    }
 }
 
 function ifNegativeValue(){
