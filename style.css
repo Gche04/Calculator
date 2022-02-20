@@ -1,31 +1,70 @@
 
-body, .remover, .buttons-container{
+body, .remover, .buttons-container, .buttons{
     display: flex;
+}
+
+.button, .equals, .display{
+    background-color: rgb(217, 224, 226);
 }
 
 body{
     justify-content: center;
     align-items: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 30px;
+    color: rgb(1, 7, 12);
     padding: 18px;
+    background-color: rgb(236, 243, 245);
 }
 
 #calculator-container{
-    max-width: 10em;
-    max-height: 20em;
-    border: 5px brown solid;
-}
-
-.display{
-    width: 100px;
-    height: 50px;
-    border: 5px brown solid;
+    border: 1px rgb(151, 168, 172) solid;
+    border-radius: 5px;
+    box-shadow: 3px 3px 8px rgb(165, 168, 168);
 }
 
 .display-work, .display-result{
+    padding: 5px 0px;
     height: 25px;
+}
+
+.display{
+    padding: 0px 5px 20px;
+}
+
+.remover{
+    justify-content: space-around;
+    gap: 8px;
+}
+
+.buttons{
+    background-color: rgb(191, 211, 216);
+}
+
+.clear, .erase{
+    padding: 5px;
+    border: 1px rgb(151, 168, 172) solid;
+    border-radius: 5px;
+}
+
+.buttons-container{
+    justify-content: space-between;
+    align-items: center;
+}
+
+.buttons{
+    flex-direction: column;
 }
 
 .figure-buttons{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+}
+
+.button, .equals, .operator{
+    padding: 10px;
+}
+
+.button{
+    border-radius: 5px;
 }
