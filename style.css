@@ -1,5 +1,5 @@
 
-body, .remover, .buttons-container, .buttons{
+body, .remover, .buttons-container, .buttons, .button, #erase{
     display: flex;
 }
 
@@ -33,27 +33,32 @@ body{
 }
 
 .remover{
-    justify-content: space-around;
+    width: 100%;
+    justify-content: space-evenly;
+    align-items: stretch;
     gap: 8px;
+    
 }
 
 .buttons{
+    flex-direction: column;
+    justify-content: baseline;
+    align-items: center;
     background-color: rgb(191, 211, 216);
 }
 
-.clear, .erase{
+.clear, #erase{
     padding: 5px;
     border: 1px rgb(151, 168, 172) solid;
-    border-radius: 5px;
+}
+
+#erase{
+    align-items: center;
 }
 
 .buttons-container{
     justify-content: space-between;
     align-items: center;
-}
-
-.buttons{
-    flex-direction: column;
 }
 
 .figure-buttons{
@@ -63,8 +68,10 @@ body{
 
 .button, .equals, .operator{
     padding: 10px;
+    justify-content: center;
+    align-items: center;
 }
 
-.button{
+.button, .clear, #erase{
     border-radius: 5px;
 }

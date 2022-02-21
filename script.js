@@ -5,7 +5,7 @@ const buttons = document.querySelectorAll('.button');
 const equals = document.querySelector('.equals');
 const operators = document.querySelectorAll('.operator');
 const clear = document.querySelector('.clear');
-const erase = document.querySelector('.erase');
+const erase = document.querySelector('#erase');
 
 let toCalculate = '0';
 let holdResult = '';
